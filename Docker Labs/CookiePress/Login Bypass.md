@@ -1,7 +1,7 @@
 
 # # Write-up: CookiePress — DockerLabs
 
-> [!INFO] **Información del Laboratorio**
+> **Información del Laboratorio**
 > - **Plataforma:** DockerLabs / BunkerLabs
 > - **Nombre de la Máquina:** CookiePress 
 > - **Dificultad:** Media 
