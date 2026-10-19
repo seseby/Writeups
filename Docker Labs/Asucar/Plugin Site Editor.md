@@ -1,20 +1,10 @@
 ---
-title: "Asucar — The Hackers Labs | Writeup"
-draft: true
-tags:
-  - writeup
-  - wordpress
-  - lfi
-  - ssh
-  - privilege-escalation
-  - puttygen
-  - linux
-date: 2026-10-19
+title: "Asucar — DockerLabs| Writeup"
 ---
 
 | **Campo** | **Detalle** |
 |:--|:--|
-| 🏷️ **Plataforma** | The Hackers Labs |
+| 🏷️ **Plataforma** | Dockerlabs |
 | 💻 **Sistema operativo** | Linux |
 | 📊 **Dificultad** | Media |
 | 🎯 **Máquina** | Asucar |
