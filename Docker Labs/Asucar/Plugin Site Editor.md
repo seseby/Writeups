@@ -12,7 +12,7 @@
 ---
 ## Resumen Ejecutivo
 
-La máquina **Asucar** es un laboratorio de *The Hackers Labs* orientado a la práctica de auditoría de seguridad en entornos **WordPress** y la escalada de privilegios en sistemas **Linux**.
+La máquina **Asucar** es un laboratorio de *Dockerlabs* orientado a la práctica de auditoría de seguridad en entornos **WordPress** y la escalada de privilegios en sistemas **Linux**.
 
 ---
 
