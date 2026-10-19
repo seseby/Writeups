@@ -27,7 +27,7 @@ En la máquina CookiePress de DockerLabs se identificó una instalación de Word
 
 Realice un escaneo completo de puertos para identificar los servicios expuestos en la máquina objetivo.
 
-```
+```bash
 sudo nmap -sS -sV -sC -Pn -n -vvv -T5 -p- 172.17.0.2
 ```
 
