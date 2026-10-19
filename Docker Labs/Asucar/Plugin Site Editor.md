@@ -1,7 +1,7 @@
 # Writeup: Asucar (The Hackers Labs)
 
 > **Información del Laboratorio**
-> - **Plataforma:** The Hackers Labs 
+> - **Plataforma:** Dockerlabs 
 > - **Nombre de la Máquina:** Asucar 
 > - **Dificultad:** Medio 
 > - **Sistema Operativo:** Linux (Debian) 
