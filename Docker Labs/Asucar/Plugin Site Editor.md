@@ -21,7 +21,7 @@ date: 2026-10-19
 > - **Sistema Operativo:** Linux (Debian) 
 > - **Técnicas clave:** Enumeración de Plugins en WordPress , Local File Inclusion (LFI), Fuerza Bruta a SSH, Escalada de Privilegios con Sudo Puttygen 
 
-![[imagen1.png]]
+![Descripción de la imagen](assets/imagen1.png)
 ---
 ---
 ## Resumen Ejecutivo
@@ -43,7 +43,7 @@ sudo nmap -sS -sV -sC -Pn -n -vvv -T5 -p- 172.17.0.2
 **Puertos abiertos identificados:**
 - **22/TCP:** OpenSSH 9.2p1 (Debian) 
 - **80/TCP:** Apache httpd 2.4.59 (Debian) — **WordPress 6.5.3** (Título: *Asucar Moreno*) 
-![[imagen2.png]]]
+![Descripción de la imagen](assets/imagen2.png)
 
 ---
 
@@ -64,7 +64,7 @@ gobuster dir \
 - `/wp-admin/` (Status: 301) 
 - `/wp-content/` (Status: 301) 
 - `/wp-includes/` (Status: 301) 
-![[imagen3.png]]
+![Descripción de la imagen](assets/imagen3.png)
 
 ###  WordPress Security Scanner
 
@@ -74,7 +74,7 @@ Ejecutamos un escaneo para ver si el WordPress tiene algún plugin:
  wpscan --url http://172.17.0.2/ -e p
 ```
 
-![[imagen4.png]]
+![Descripción de la imagen](assets/imagen4.png)
 
 ---
 
@@ -84,7 +84,7 @@ Ejecutamos un escaneo para ver si el WordPress tiene algún plugin:
 
 La herramienta de escaneo de WordPress no reporta plugins mediante auditoría pasiva predeterminada. Inspeccionando manualmente las referencias del código fuente HTML de la página principal, se detectan recursos del plugin **site-editor**:
 
-![[imagen5.png]]
+![Descripción de la imagen](assets/imagen5.png)
 
 ```html
 <link id="general-css" rel="stylesheet" href="http://asucar.dl/wp-content/plugins/site-editor/framework/assets/css/general.min.css?ver=1.1" media="all">
@@ -93,21 +93,21 @@ La herramienta de escaneo de WordPress no reporta plugins mediante auditoría pa
 Al verificar el archivo `readme.txt` del plugin en `/wp-content/plugins/site-editor/readme.txt`, confirmamos la versión instalada:
 
 **Versión confirmada:** `Stable tag: 1.1` .
-![[imagen6.png]]
+![Descripción de la imagen](assets/imagen6.png)
 ---
 
 ### Inclusión Local de Archivos (LFI - CVE-2018-7422)
 
 El plugin **Site Editor v1.1** contiene una vulnerabilidad de LFI en su controlador AJAX (CVE-2018-7422).
-![[imagen7.png]]
+![Descripción de la imagen](assets/imagen7.png)
 
 A través del parámetro `ajax_path` consultamos la ruta `/etc/passwd` para auditar las cuentas del sistema.
-![[imagen8.png]]
+![Descripción de la imagen](assets/imagen8.png)
 
 **Resultado:**
 Obtenemos el listado de usuarios del sistema, confirmando la existencia de la cuenta **`curiosito`** (UID 1000).
 
-![[imagen9.png]]
+![Descripción de la imagen](assets/imagen9.png)
 
 
 ---
@@ -125,7 +125,7 @@ hydra -l curiosito -P /usr/share/wordlists/rockyou.txt 172.17.0.2 ssh
 **Credenciales identificadas:**
 - **Usuario:** `curiosito` 
 - **Contraseña:** `password1` 
-![[imagen10.png]]
+![Descripción de la imagen](assets/imagen10.png)
 ---
 
 ### Infiltración SSH
@@ -137,7 +137,7 @@ ssh curiosito@172.17.0.2
 ```
 
 Se establece la sesión de consola interactiva como el usuario **curiosito**.
-![[Writeups/Docker Labs/Asucar/assets/imagen11.png]]
+![Descripción de la imagen](assets/imagen11.png)
 ---
 
 ## 4. Escalada de Privilegios
@@ -170,7 +170,7 @@ Aprovechando que `puttygen` permite convertir y exportar claves públicas a ruta
    ssh-keygen -t rsa -f /tmp/id_rsa -N ""
    ```
 
-![[Writeups/Docker Labs/Asucar/assets/imagen13.png]]
+![Descripción de la imagen](assets/imagen13.png)
 
 2. **Exportación de la clave pública al archivo de claves autorizadas del superusuario:**
 
@@ -178,7 +178,7 @@ Aprovechando que `puttygen` permite convertir y exportar claves públicas a ruta
    sudo /usr/bin/puttygen /tmp/id_rsa -O public-openssh -o /root/.ssh/authorized_keys
    ```
 
-![[Writeups/Docker Labs/Asucar/assets/imagen14.png]]
+![Descripción de la imagen](assets/imagen14.png)
 
 3. **Conexión como superusuario:**
 
@@ -186,14 +186,14 @@ Aprovechando que `puttygen` permite convertir y exportar claves públicas a ruta
    ssh -i /tmp/id_rsa root@localhost
    ```
 
-![[Writeups/Docker Labs/Asucar/assets/imagen12.png]]
+![Descripción de la imagen](assets/imagen12.png)
 Confirmamos la elevación de privilegios:
 
 ```bash
 whoami
 # Output: root
 ```
-![[Writeups/Docker Labs/Asucar/assets/imagen15.png]]
+![Descripción de la imagen](assets/imagen15.png)
 
 ¡Acceso de superusuario (**root**) completado con éxito! 🎉
 
