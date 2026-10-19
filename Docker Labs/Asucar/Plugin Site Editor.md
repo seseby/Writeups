@@ -1,4 +1,17 @@
 ---
+title: "Asucar — The Hackers Labs | Writeup"
+draft: true
+tags:
+  - writeup
+  - wordpress
+  - lfi
+  - ssh
+  - privilege-escalation
+  - puttygen
+  - linux
+date: 2026-10-19
+---
+
 | **Campo** | **Detalle** |
 |:--|:--|
 | 🏷️ **Plataforma** | The Hackers Labs |
@@ -10,6 +23,7 @@
 | 🛠️ **Vulnerabilidad** | LFI — CVE-2018-7422 |
 | 🔑 **Acceso inicial** | Hydra, SSH |
 | ⬆️ **Escalada de privilegios** | Sudo, PuTTYgen |
+
 ---
 
 # Writeup: Asucar (The Hackers Labs)
