@@ -49,7 +49,8 @@ gobuster dir \
 - `/wordpress/` (Status: 301) 
 - `/wp-admin/` (Status: 301) 
 - `/wp-content/` (Status: 301) 
-- `/wp-includes/` (Status: 301) 
+- `/wp-includes/` (Status: 301)
+
 ![Descripción de la imagen](assets/imagen3.png)
 
 ###  WordPress Security Scanner
