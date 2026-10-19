@@ -1,5 +1,5 @@
 
-# # Write-up: CookiePress — DockerLabs
+# Write-up: CookiePress — DockerLabs
 
 > **Información del Laboratorio**
 > - **Plataforma:** DockerLabs / BunkerLabs
