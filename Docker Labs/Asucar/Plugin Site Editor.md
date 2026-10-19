@@ -1,6 +1,7 @@
 ---
 ## Asucar — DockerLabs| Writeup
 
+---
 | **Campo** | **Detalle** |
 |:--|:--|
 | 🏷️ **Plataforma** | Dockerlabs |
