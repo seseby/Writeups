@@ -11,7 +11,7 @@
 > - **Vulnerabilidad principal:** CVE-2025-34077
 > - **Técnicas clave:** Reconocimiento de servicios, enumeración web, identificación de plugins, investigación de vulnerabilidades, bypass de autenticación y suplantación de sesión administrativa.
 
-![[Writeups/Docker Labs/CookiePress/assets/imagen1.png]]
+![Descripción de la imagen](assets/imagen1.png)
 
 ---
 ## Resumen Ejecutivo
