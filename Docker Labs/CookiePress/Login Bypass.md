@@ -37,7 +37,7 @@ El escaneo permitió identificar el **puerto 80/TCP abierto**, correspondiente a
 
 ### Fuzzing web (Gobuster)
 
-A continuación, se utilice Gobuster para buscar directorios y archivos que pudieran revelar información relevante sobre la aplicación web.
+Utilicé Gobuster para buscar directorios y archivos que pudieran revelar información relevante sobre la aplicación web.
 
 ```
  gobuster dir \
