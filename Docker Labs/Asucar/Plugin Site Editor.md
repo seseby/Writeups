@@ -12,7 +12,7 @@
 ---
 ## Resumen Ejecutivo
 
-La máquina **Asucar** es un laboratorio de *Dockerlabs* orientado a la práctica de auditoría de seguridad en entornos **WordPress** y la escalada de privilegios en sistemas **Linux**.
+Durante la auditoría del laboratorio Asucar identifiqué una vulnerabilidad de inclusión local de archivos (LFI) en el plugin Site Editor de WordPress. La lectura de /etc/passwd permitió identificar un usuario del sistema, que utilicé para obtener acceso inicial por SSH mediante una contraseña débil. Finalmente, una configuración insegura de sudoers que permitía ejecutar puttygen como root sin contraseña facilitó la escalada hasta el superusuario.
 
 ---
 
