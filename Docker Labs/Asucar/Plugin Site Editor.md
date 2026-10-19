@@ -1,5 +1,5 @@
 ---
-title: "Asucar — DockerLabs| Writeup"
+## Asucar — DockerLabs| Writeup
 ---
 
 | **Campo** | **Detalle** |
