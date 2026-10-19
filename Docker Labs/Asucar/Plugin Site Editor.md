@@ -124,6 +124,7 @@ ssh curiosito@172.17.0.2
 ```
 
 Se establece la sesión de consola interactiva como el usuario **curiosito**.
+
 ![Descripción de la imagen](assets/imagen11.png)
 ---
 
