@@ -1,6 +1,5 @@
 ---
 ## Asucar — DockerLabs| Writeup
----
 
 | **Campo** | **Detalle** |
 |:--|:--|
