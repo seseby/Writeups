@@ -174,6 +174,7 @@ Aprovechando que `puttygen` permite convertir y exportar claves públicas a ruta
    ```
 
 ![Descripción de la imagen](assets/imagen12.png)
+
 Confirmamos la elevación de privilegios:
 
 ```bash
