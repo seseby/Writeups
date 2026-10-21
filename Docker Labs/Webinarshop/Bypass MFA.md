@@ -1,6 +1,6 @@
 # # Write-up: Webinarshop — DockerLabs
 
-> [!INFO] **Información del Laboratorio**
+> **Información del Laboratorio**
 > - **Plataforma:** DockerLabs / BunkerLabs
 > - **Nombre de la Máquina:** Webinarshop
 > - **Dificultad:** Media 
