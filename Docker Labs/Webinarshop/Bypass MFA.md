@@ -140,7 +140,7 @@ Después de activar la regla, se repitió el intento de autenticación para comp
 Esta prueba permitió verificar si el acceso dependía de la información manipulable que recibía el navegador, en lugar de una validación de autenticación aplicada de forma segura en el servidor.
 
 ![Descripción de la imagen](assets/imagen13.png)
-### 4.3. Verificación del acceso administrativo
+### 4.2. Verificación del acceso administrativo
 
 Tras aplicar la modificación, se comprobó que la aplicación permitía completar el proceso de autenticación y acceder al panel administrativo.
 
