@@ -10,7 +10,7 @@
 > - **Vulnerabilidad principal:** CWE-89 / OWASP A03:2021, OWASP A07:2021
 > - **Técnicas clave:** Interceptación de tráfico HTTP, SQL Injection mediante la cabecera User-Agent, extracción de credenciales, bypass de MFA y manipulación de respuestas HTTP.
 
-![[Writeups/Docker Labs/Webinarshop/assets/imagen1.png|700]]
+![Descripción de la imagen](assets/imagen1.png)
 
 ---
 
@@ -26,16 +26,15 @@ En la máquina Webinarshop se identificó una cadena de ataque que combina una i
 
 Tras desplegar la máquina Webinarshop en DockerLabs, se accedió a la aplicación web y se comprobó que se trataba de una tienda online de juguetes para mascotas.
 
-![[Writeups/Docker Labs/Webinarshop/assets/imagen2.png]]
+![Descripción de la imagen](assets/imagen2.png)
 ### 1.1. Creación de una cuenta de usuario
 
 Antes de comenzar las pruebas, se creó una cuenta de usuario para interactuar con la aplicación como un usuario legítimo y analizar su funcionamiento.
 
 Esto permitió acceder al área personal y observar las peticiones HTTP generadas durante la navegación y el inicio de sesión.
 
-![[Writeups/Docker Labs/Webinarshop/assets/imagen3.png]]
+![Descripción de la imagen](assets/imagen3.png)
 
-![[Writeups/Docker Labs/Webinarshop/assets/imagen4.png]]
 ### 1.2. Interceptación del tráfico con Burp Suite
 
 Se utilizó Burp Suite para interceptar y analizar las comunicaciones entre el navegador y el servidor. Para ello, se empleó el navegador Chromium integrado en Burp Suite, evitando configuraciones adicionales del proxy.
@@ -44,7 +43,7 @@ Tras iniciar sesión co**n** la cuenta creada, se accedió a **Proxy → HTTP hi
 
 A continuación, se inspeccionaron sus cabeceras HTTP para analizar la información enviada al servidor e identificar posibles puntos de entrada susceptibles de ser vulnerables.
 
-![[Writeups/Docker Labs/Webinarshop/assets/imagen4.png]]
+![Descripción de la imagen](assets/imagen4.png)
 
 ---
 
@@ -56,7 +55,7 @@ Tras inspeccionar la petición `GET /cuenta` en Burp Suite, se decidió analizar
 
 Esta cabecera forma parte de la petición HTTP enviada por el navegador y puede convertirse en un vector de ataque si la aplicación incorpora su contenido directamente en una consulta SQL sin validarlo ni parametrizarlo correctamente.
 
-![[Writeups/Docker Labs/Webinarshop/assets/imagen5.png]]
+![Descripción de la imagen](assets/imagen5.png)
 
 ### 2.1. Preparación de la petición para sqlmap
 
@@ -66,7 +65,7 @@ Este método permite a `sqlmap` utilizar una petición real de la aplicación du
 
 El archivo resultante se utilizó como entrada para la herramienta.
 
-![[Writeups/Docker Labs/Webinarshop/assets/imagen6.png]]
+![Descripción de la imagen](assets/imagen6.png)
 
 ### 2.2. Detección, explotación de la inyección SQL  
 
@@ -76,7 +75,7 @@ Se utilizó `sqlmap` para comprobar si la cabecera `User-Agent` era vulnerable a
 sqlmap -r peticion.txt --dbs -p "User-Agent" --batch 
 ```
 
-![[Writeups/Docker Labs/Webinarshop/assets/imagen7.png]]
+![Descripción de la imagen](assets/imagen7.png)
 
 Descubrimos que la base de datos era SQLite así que seguimos atacando pero ahora sabiendo a que base de datos corresponde. 
 
@@ -86,7 +85,7 @@ sqlmap -r peticion.txt -p "User-Agent" --level=3 --risk=2 --dbms=sqlite --tables
 
 Las pruebas confirmaron la presencia de una inyección SQL a través de la cabecera `User-Agent`. A partir de este punto de entrada, fue posible consultar información almacenada en la base de datos de la aplicación.
 
-![[Writeups/Docker Labs/Webinarshop/assets/imagen8.png]]
+![Descripción de la imagen](assets/imagen8.png)
 
 ### 2.3. Extracción de credenciales
 
@@ -98,7 +97,7 @@ La información obtenida permitió continuar con la siguiente fase del laborator
 sqlmap -r peticion.txt -p "User-Agent" --level=3 --risk=2 --dbms=sqlite --batch -dump -T users
 ```
 
-![[Writeups/Docker Labs/Webinarshop/assets/imagen9.png]]
+![Descripción de la imagen](assets/imagen9.png)
 ---
 
 ## 3. Acceso a la Cuenta Administrativa
@@ -109,7 +108,7 @@ Tras extraer las credenciales mediante la inyección SQL, se utilizaron las corr
 
 La aplicación reconoció las credenciales y permitió avanzar al siguiente paso del proceso de autenticación. Sin embargo, antes de completar el acceso, solicitó un segundo factor de autenticación (MFA).
 
-![[Writeups/Docker Labs/Webinarshop/assets/imagen10.png]]
+![Descripción de la imagen](assets/imagen10.png)
 
 
 ### 3.1. Identificación del segundo factor de autenticación (MFA)
@@ -118,7 +117,7 @@ Durante el proceso de inicio de sesión, se comprobó que conocer la contraseña
 
 Este comportamiento impedía acceder directamente al panel administrativo utilizando únicamente las credenciales extraídas. Por ello, se continuó analizando el intercambio de peticiones y respuestas HTTP con Burp Suite para estudiar cómo se validaba el código.
 
-![[Writeups/Docker Labs/Webinarshop/assets/imagen11.png]]
+![Descripción de la imagen](assets/imagen11.png)
 
 ---
 
@@ -130,7 +129,7 @@ Una vez identificada la solicitud del segundo factor de autenticación, se intro
 
 Se utilizó Burp Suite para interceptar y analizar la respuesta HTTP del servidor, prestando especial atención a los datos devueltos durante la validación del código.
 
-![[Writeups/Docker Labs/Webinarshop/assets/imagen12.png]]
+![Descripción de la imagen](assets/imagen12.png)
 
 ### 4.1. Configuración de Match and Replace en Burp Suite
 
@@ -140,7 +139,7 @@ Después de activar la regla, se repitió el intento de autenticación para comp
 
 Esta prueba permitió verificar si el acceso dependía de la información manipulable que recibía el navegador, en lugar de una validación de autenticación aplicada de forma segura en el servidor.
 
-![[Writeups/Docker Labs/Webinarshop/assets/imagen13.png]]
+![Descripción de la imagen](assets/imagen13.png)
 ### 4.3. Verificación del acceso administrativo
 
 Tras aplicar la modificación, se comprobó que la aplicación permitía completar el proceso de autenticación y acceder al panel administrativo.
@@ -149,9 +148,9 @@ Desde este panel fue posible consultar información de las compras de los usuari
 
 La combinación de la extracción de credenciales mediante SQL Injection y la manipulación de la respuesta del MFA permitió completar la cadena de ataque del laboratorio.
 
-![[Writeups/Docker Labs/Webinarshop/assets/imagen14.png]]
+![Descripción de la imagen](assets/imagen14.png)
 
-![[Writeups/Docker Labs/Webinarshop/assets/imagen15.png]]
+![Descripción de la imagen](assets/imagen15.png)
 ---
 
 ## 5. Mitigaciones
