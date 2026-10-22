@@ -1,6 +1,6 @@
 # Writeup: Banking (DockerLabs)
 
-> [!INFO] **Información del Laboratorio**
+> **Información del Laboratorio**
 > - **Plataforma:** DockerLabs / BunkerLabs
 > - **Nombre de la Máquina:** Banking
 > - **Dificultad:** Media 
@@ -8,7 +8,7 @@
 > - **Servicio expuesto:** HTTP (puerto 8000)
 > - **Técnicas clave:** Análisis estático de APK, IDOR, exposición de `.git`, filtración de secretos y falsificación de JWT.
 
-![[Writeups/Docker Labs/Banking/assets/imagen1.png]]
+![Descripción de la imagen](assets/imagen1.png)
 
 ---
 
@@ -46,9 +46,9 @@ Durante la enumeración identificamos una aplicación web accesible a través de
 nmap -p- -sC -sV --min-rate 5000 -n -vvv -Pn 172.17.0.2
 ```
 
-![[Writeups/Docker Labs/Banking/assets/imagen2.png]]
+![Descripción de la imagen](assets/imagen2.png)
 
-![[Writeups/Docker Labs/Banking/assets/imagen3.png]]
+![Descripción de la imagen](assets/imagen3.png)
 
 La página incluye una opción para descargar el APK de la aplicación Android. Este archivo será el punto de partida para analizar el funcionamiento interno de la aplicación y descubrir posibles fallos de seguridad.
 
@@ -60,18 +60,18 @@ La página incluye una opción para descargar el APK de la aplicación Android. 
 
 La propia página web permite descargar el APK de la aplicación bancaria.
 
-![[Writeups/Docker Labs/Banking/assets/imagen4.png]]
+![Descripción de la imagen](assets/imagen4.png)
 
 Una vez descargado, examinamos su contenido para localizar información que pueda resultar útil durante la auditoría.
 
-![[Writeups/Docker Labs/Banking/assets/imagen5.png]]
+![Descripción de la imagen](assets/imagen5.png)
 
 A continuación, utilizamos `grep` para buscar cadenas de texto relacionadas con endpoints, credenciales, configuración o información sensible.
 ```bash
 grep -r 'password' * 
 ```
 
-![[Writeups/Docker Labs/Banking/assets/imagen6.png]]
+![Descripción de la imagen](assets/imagen6.png)
 
 Durante el análisis encontramos el archivo `api_usage.txt`, que contiene información sobre el funcionamiento de la API y sus endpoints.
 
@@ -79,7 +79,7 @@ Este tipo de información puede revelar funcionalidades internas que no resultan
 
 También podemos utilizar **JADX** para decompilar el APK y examinar el código Java de la aplicación.
 
-![[Writeups/Docker Labs/Banking/assets/imagen7.png]]
+![Descripción de la imagen](assets/imagen7.png)
 
 Al revisar la funcionalidad de cambio de contraseña, identificamos un endpoint que recibe el usuario cuya contraseña se quiere modificar, pero no comprueba adecuadamente que la cuenta objetivo pertenezca al usuario autenticado.
 
@@ -97,17 +97,17 @@ Este comportamiento permite que un usuario autenticado intente modificar la cont
 
 Para comprobar el comportamiento de la API, primero nos registramos en la aplicación con una cuenta propia.
 
-![[Writeups/Docker Labs/Banking/assets/imagen8.png]]
+![Descripción de la imagen](assets/imagen8.png)
 
 Una vez dentro, accedemos a la funcionalidad de cambio de contraseña.
 
-![[Writeups/Docker Labs/Banking/assets/imagen9.png]]
+![Descripción de la imagen](assets/imagen9.png)
 
 A continuación, configuramos la interceptación del tráfico HTTP mediante Burp Suite y realizamos un cambio de contraseña sobre nuestra propia cuenta.
 
 De esta manera podemos observar la estructura de la petición, los parámetros que utiliza y la información que envía el cliente al servidor.
 
-![[Writeups/Docker Labs/Banking/assets/imagen10.png]]
+![Descripción de la imagen](assets/imagen10.png)
 
 El análisis de esta petición nos permite identificar el parámetro que determina la cuenta objetivo. La falta de una comprobación de autorización adecuada hace posible probar la modificación de una cuenta diferente.
 
@@ -115,13 +115,13 @@ El análisis de esta petición nos permite identificar el parámetro que determi
 
 Una vez identificada la petición vulnerable, modificamos el usuario objetivo para que corresponda a `admin`, manteniendo el resto de los parámetros necesarios para ejecutar la operación. Para hacer esto enviamos la petición al repeater. 
 
-![[Writeups/Docker Labs/Banking/assets/imagen11.png]]
+![Descripción de la imagen](assets/imagen11.png)
 
 Si el servidor acepta la petición, la contraseña de la cuenta administrativa queda modificada.
 
 A continuación, cerramos la sesión e iniciamos sesión con el usuario `admin` y la contraseña asignada durante la explotación.
 
-![[Writeups/Docker Labs/Banking/assets/imagen12.png]]
+![Descripción de la imagen](assets/imagen12.png)
 
 Con ello confirmamos que el fallo de autorización permite obtener acceso a la cuenta administrativa.
 
@@ -135,11 +135,11 @@ Durante el análisis adicional de la aplicación, identificamos una referencia a
 
 Este directorio contiene información interna del repositorio de desarrollo, como objetos, referencias y metadatos que no deberían estar disponibles públicamente en una aplicación desplegada en producción.
 
-![[Writeups/Docker Labs/Banking/assets/imagen13.png]]
+![Descripción de la imagen](assets/imagen13.png)
 
 Al acceder a la ruta correspondiente desde el navegador, comprobamos que el servidor permite consultar su contenido mediante un listado de directorios.
 
-![[Writeups/Docker Labs/Banking/assets/imagen14.png]]
+![Descripción de la imagen](assets/imagen14.png)
 
 ### 3.2. Recuperación del repositorio
 
@@ -151,11 +151,11 @@ Desde nuestra máquina Kali Linux, utilizamos `git clone` contra la URL identifi
 git clone http://172.17.0.2:8000/backups/secret/.git/ aplicacion
 ```
 
-![[Writeups/Docker Labs/Banking/assets/imagen15.png]]
+![Descripción de la imagen](assets/imagen15.png)
 
 Una vez finalizada la descarga, accedemos al directorio del proyecto y examinamos los archivos disponibles.
 
-![[Writeups/Docker Labs/Banking/assets/imagen16.png]]
+![Descripción de la imagen](assets/imagen16.png)
 
 La recuperación de un repositorio expuesto puede revelar información que no forma parte de la interfaz pública de la aplicación, incluidos archivos de configuración, código interno y secretos que hayan quedado almacenados en el historial.
 
@@ -163,7 +163,7 @@ La recuperación de un repositorio expuesto puede revelar información que no fo
 
 Al revisar los archivos del proyecto, localizamos `config.py`, donde se encuentra el secreto utilizado para firmar los tokens JWT.
 
-![[Writeups/Docker Labs/Banking/assets/imagen17.png]]
+![Descripción de la imagen](assets/imagen17.png)
 
 La exposición de este secreto compromete la seguridad del mecanismo de autenticación, ya que permite generar tokens que pueden superar la verificación de firma del servidor.
 
@@ -177,11 +177,11 @@ La firma permite comprobar que el token ha sido generado por una entidad que con
 
 Para comprobar la vulnerabilidad, iniciamos sesión con nuestra cuenta de prueba y capturamos el token JWT asociado a la sesión mediante Burp Suite.
 
-![[Writeups/Docker Labs/Banking/assets/imagen18.png]]
+![Descripción de la imagen](assets/imagen18.png)
 
 A continuación, inspeccionamos el token utilizando jwt.io para examinar su cabecera y payload.
 
-![[Writeups/Docker Labs/Banking/assets/imagen19.png]]
+![Descripción de la imagen](assets/imagen19.png)
 
 Esta inspección permite identificar los campos que utiliza la aplicación para representar la identidad del usuario y, si corresponde, sus privilegios.
 
@@ -191,17 +191,17 @@ Es importante distinguir entre **decodificar un JWT y verificar su firma**: el c
 
 Dado que hemos recuperado el secreto de firma, podemos modificar los campos pertinentes del payload para representar la identidad de `admin` y generar una nueva firma utilizando dicho secreto.
 
-![[Writeups/Docker Labs/Banking/assets/imagen20.png]]
+![Descripción de la imagen](assets/imagen20.png)
 
 Sustituimos el token original por el generado y repetimos una petición a la API mediante Burp Suite.
 
-![[Writeups/Docker Labs/Banking/assets/imagen21.png]]
+![Descripción de la imagen](assets/imagen21.png)
 
 Si el servidor acepta el token y reconoce la identidad administrativa, confirmamos que la filtración del secreto permite suplantar al administrador mediante la falsificación de JWT.
 
 Para verificar el resultado desde la interfaz web, capturamos una petición realizada por el navegador y sustituimos su token de autorización por el token administrativo generado.
 
-![[Writeups/Docker Labs/Banking/assets/imagen22.png]]
+![Descripción de la imagen](assets/imagen22.png)
 
 Finalmente, comprobamos que la aplicación reconoce la sesión como administrativa.
 
